@@ -80,16 +80,24 @@ class SDKException(BroadlinkException):
     """Common base class for all SDK exceptions."""
 
 
-class DeviceInformationError(SDKException):
+class DeviceInformationError(SDKException, ValueError):
     """Device information is not intact."""
 
 
-class ChecksumError(SDKException):
+class ChecksumError(SDKException, ValueError):
     """Received data packet check error."""
 
 
-class LengthError(SDKException):
+class LengthError(SDKException, ValueError):
     """Received data packet length error."""
+
+
+class EncryptChecksumError(SDKException, ValueError):
+    """Received encrypted data packet check error."""
+
+
+class EncryptLengthError(SDKException, ValueError):
+    """Received encypted data packet length error."""
 
 
 class NetworkTimeoutError(SDKException):
@@ -118,6 +126,8 @@ BROADLINK_EXCEPTIONS = {
     -4000: (NetworkTimeoutError, "Network timeout"),
     -4007: (LengthError, "Received data packet length error"),
     -4008: (ChecksumError, "Received data packet check error"),
+    -4010: (EncryptLengthError, "Received encrypted data packet length error"),
+    -4011: (EncryptChecksumError, "Received encrypted data packet check error"),
 }
 
 

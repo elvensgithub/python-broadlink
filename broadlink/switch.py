@@ -200,6 +200,27 @@ class sp2(device):
         payload = self.decrypt(response[0x38:])
         return bool(payload[0x4] == 2 or payload[0x4] == 3 or payload[0x4] == 0xFF)
 
+
+class sp2s(sp2):
+    """Controls a Broadlink SP2S."""
+
+    TYPE = "SP2S"
+
+    def get_energy(self) -> float:
+        """Return the power consumption in W."""
+        packet = bytearray(16)
+        packet[0] = 4
+        response = self.send_packet(0x6A, packet)
+        check_error(response[0x22:0x24])
+        payload = self.decrypt(response[0x38:])
+        return int.from_bytes(payload[0x4:0x7], "little") / 1000
+
+
+class sp3s(sp2):
+    """Controls a Broadlink SP3S."""
+
+    TYPE = "SP3S"
+
     def get_energy(self) -> float:
         """Return the power consumption in W."""
         packet = bytearray([8, 0, 254, 1, 5, 1, 0, 0, 0, 45])
